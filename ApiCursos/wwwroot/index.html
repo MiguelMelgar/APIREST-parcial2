@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Listado de Cursos</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    h1 { color: #2a7b78; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+    th { background-color: #e0f7f7; }
+  </style>
+</head>
+<body>
+  <h1>Listado de Cursos Académicos</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Curso</th>
+        <th>Créditos</th>
+        <th>Horas/Sem</th>
+        <th>Ciclo</th>
+        <th>Docente</th>
+      </tr>
+    </thead>
+    <tbody id="cursosBody"></tbody>
+  </table>
+
+  <script>
+  fetch("https://localhost:44339/api/cursos")
+    .then(response => response.json())
+    .then(data => {
+      const cursos = data.$values;
+      const tbody = document.getElementById("cursosBody");
+
+      cursos.forEach(curso => {
+        const row = document.createElement("tr");
+
+        const nombreCurso = curso.cursoNombre || '';
+        const creditos = curso.creditos || '';
+        const horas = curso.horasSemanal || '';
+        const ciclo = curso.ciclo || '';
+        const docente = curso.docente?.nombres + ' ' + curso.docente?.apellidos || 'Sin docente';
+
+        row.innerHTML = `
+          <td>${nombreCurso}</td>
+          <td>${creditos}</td>
+          <td>${horas}</td>
+          <td>${ciclo}</td>
+          <td>${docente}</td>
+        `;
+
+        tbody.appendChild(row);
+      });
+    })
+    .catch(err => {
+      console.error("Error al cargar cursos:", err);
+      alert("No se pudieron cargar los cursos.");
+    });
+</script>
+
+</body>
+</html>
