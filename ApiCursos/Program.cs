@@ -35,9 +35,18 @@ namespace ApiCursos
 
             app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
+            //Habilitar CORS
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("Permitir todo",
+                    policy => policy.AllowAnyOrigin()
+                                    .AllowAnyHeader()
+                                    .AllowAnyMethod());
+            });
+
             app.UseDefaultFiles();
             app.UseStaticFiles();
-
+            app.UseRouting();
             app.MapControllers();
 
             app.Run();
